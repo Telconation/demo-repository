@@ -1,12 +1,12 @@
 {
   "name": "PARKIN",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.2",
   "type": "module",
   "scripts": {
-    "dev":          "vite",
-    "build":        "vite build",
-    "preview":      "vite preview"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.2.0",

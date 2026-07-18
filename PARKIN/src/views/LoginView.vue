@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden"
+  <div class="min-h-screen flex items-start sm:items-center justify-center py-6 px-4 relative overflow-y-auto"
        :style="{ background: 'var(--login-bg)' }">
     <!-- Background pattern -->
     <div class="absolute inset-0">
@@ -9,7 +9,7 @@
     </div>
 
     <!-- Login Card -->
-    <div class="card-glass max-w-md w-full space-y-3 animate-slide-up relative z-10">
+    <div class="card-glass max-w-md w-full space-y-3 relative z-10 my-auto">
       <!-- Theme Toggle -->
       <div class="flex justify-end">
         <button @click="themeStore.toggle()" class="p-2 rounded-xl transition-all" style="background: var(--surface-bg);">
@@ -19,7 +19,7 @@
 
       <!-- Logo -->
       <div class="text-center">
-        <img src="../assets/Logo.png" alt="PARKIN" class="mx-auto w-auto h-auto object-contain" />
+        <img src="../assets/Logo.png" alt="PARKIN" class="mx-auto w-auto object-contain" />
         <p class="text-sm" style="color: var(--surface-muted);">Login untuk melanjutkan</p>
       </div>
 

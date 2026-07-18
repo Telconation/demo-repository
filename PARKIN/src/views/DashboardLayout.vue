@@ -2,8 +2,10 @@
   <div class="min-h-screen flex flex-col lg:flex-row">
 
     <!-- SIDEBAR (Desktop) -->
-    <aside class="hidden lg:flex lg:flex-col lg:w-64 fixed h-full z-40"
-           style="background: var(--surface-card); border-right: 1px solid var(--surface-border);">
+    <aside
+      class="hidden lg:flex lg:flex-col lg:w-64 fixed h-full z-40"
+      style="background: var(--surface-card); border-right: 1px solid var(--surface-border);"
+    >
       <!-- Logo -->
       <div class="p-5" style="border-bottom: 1px solid var(--surface-border);">
         <div class="flex items-center gap-3">
@@ -17,19 +19,26 @@
 
       <!-- Navigation -->
       <nav class="flex-1 p-3 space-y-1 overflow-y-auto">
-        <router-link v-for="route in navRoutes" :key="route.path"
-                     :to="route.path" class="nav-link" active-class="active">
+        <router-link
+          v-for="route in navRoutes"
+          :key="route.path"
+          :to="route.path"
+          class="nav-link"
+          active-class="active"
+        >
           <font-awesome-icon :icon="route.icon" class="w-4 h-4" />
           <span>{{ route.name }}</span>
         </router-link>
       </nav>
 
-      <!-- Theme + User Info + Demo Controls -->
+      <!-- Theme Toggle + User Info + Demo Controls -->
       <div class="p-4" style="border-top: 1px solid var(--surface-border);">
         <!-- Theme Toggle -->
-        <button @click="themeStore.toggle()"
-                class="w-full flex items-center gap-3 px-3 py-2 rounded-xl mb-3 transition-all cursor-pointer"
-                style="background: var(--surface-bg);">
+        <button
+          @click="themeStore.toggle()"
+          class="w-full flex items-center gap-3 px-3 py-2 rounded-xl mb-3 transition-all duration-200 cursor-pointer"
+          style="background: var(--surface-bg);"
+        >
           <font-awesome-icon :icon="themeStore.isDark ? ['fas', 'moon'] : ['fas', 'sun']" class="w-4 h-4" />
           <span class="text-sm font-medium" style="color: var(--surface-text);">
             {{ themeStore.isDark ? 'Dark Mode' : 'Light Mode' }}
@@ -37,7 +46,7 @@
           <div class="ml-auto theme-toggle" :class="{ 'is-dark': themeStore.isDark }"></div>
         </button>
 
-        <!-- Demo Controls Banner -->
+        <!-- Demo Simulator Controls -->
         <div class="mb-3 p-3 rounded-xl" style="background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.25);">
           <p class="text-[10px] font-bold uppercase tracking-wider mb-2" style="color: #818cf8;">
             <font-awesome-icon :icon="['fas', 'robot']" class="mr-1" /> Demo Simulator
@@ -59,7 +68,7 @@
           </div>
         </div>
 
-        <!-- User Info -->
+        <!-- User Info + Connection Status -->
         <div class="flex items-center gap-3 mb-3">
           <div class="w-9 h-9 rounded-full bg-brand-primary/20 flex items-center justify-center text-brand-primary-light font-bold text-sm">
             {{ userInitials }}
@@ -72,14 +81,17 @@
         </div>
 
         <button @click="handleLogout" class="btn btn-ghost btn-sm w-full">
-          <font-awesome-icon :icon="['fas', 'sign-out-alt']" class="mr-2" /> Logout
+          <font-awesome-icon :icon="['fas', 'sign-out-alt']" class="mr-2" />
+          Logout
         </button>
       </div>
     </aside>
 
-    <!-- MOBILE HEADER -->
-    <header class="lg:hidden sticky top-0 z-50 backdrop-blur-md"
-            style="background: color-mix(in srgb, var(--surface-card) 95%, transparent); border-bottom: 1px solid var(--surface-border);">
+    <!-- MOBILE HEADER — identik dengan production, ditambah sim controls -->
+    <header
+      class="lg:hidden sticky top-0 z-50 backdrop-blur-md"
+      style="background: color-mix(in srgb, var(--surface-card) 95%, transparent); border-bottom: 1px solid var(--surface-border);"
+    >
       <div class="flex items-center justify-between px-4 py-3">
         <div class="flex items-center gap-2.5">
           <img src="/images/icons/maskable_icon_x96.png" alt="PARKIN" class="w-8 h-8 rounded-lg" />
@@ -88,23 +100,36 @@
             <p class="text-[9px]" style="color: var(--surface-muted);">{{ user?.nama }}</p>
           </div>
         </div>
-        <div class="flex items-center gap-1.5">
-          <button @click="themeStore.toggle()" class="p-1.5 rounded-lg" style="background: var(--surface-bg);">
+
+        <div class="flex items-center gap-2">
+          <!-- Theme -->
+          <button
+            @click="themeStore.toggle()"
+            class="p-1.5 rounded-lg transition-all"
+            style="background: var(--surface-bg);"
+            :title="themeStore.isDark ? 'Dark Mode' : 'Light Mode'"
+          >
             <font-awesome-icon :icon="themeStore.isDark ? ['fas', 'moon'] : ['fas', 'sun']" />
           </button>
-          <!-- Mobile Demo Controls -->
+
+          <!-- Demo Sim Start/Stop (icon only) -->
           <button @click="toggleSim"
-                  class="text-xs px-2 py-1 rounded-lg font-semibold"
+                  class="p-1.5 rounded-lg transition-all text-xs"
                   :style="parkingStore.simulatorActive
                     ? 'background: rgba(239,68,68,0.15); color: #f87171;'
-                    : 'background: rgba(34,197,94,0.15); color: #4ade80;'">
+                    : 'background: rgba(34,197,94,0.15); color: #4ade80;'"
+                  :title="parkingStore.simulatorActive ? 'Stop Simulator' : 'Start Simulator'">
             <font-awesome-icon :icon="parkingStore.simulatorActive ? ['fas', 'stop'] : ['fas', 'play']" />
           </button>
-          <button @click="doReset" class="text-xs px-2 py-1 rounded-lg" style="background: var(--surface-bg); color: var(--surface-muted);">
-            <font-awesome-icon :icon="['fas', 'rotate-left']" />
+
+          <!-- Status badge -->
+          <span :class="['badge text-[10px]', statusBadgeClass]">
+            {{ statusLabel }}
+          </span>
+
+          <button @click="handleLogout" class="btn btn-ghost btn-sm py-1 px-2 text-xs">
+            Logout
           </button>
-          <span :class="['badge text-[10px]', statusBadgeClass]">{{ statusLabel }}</span>
-          <button @click="handleLogout" class="btn btn-ghost btn-sm py-1 px-2 text-xs">Logout</button>
         </div>
       </div>
     </header>
@@ -117,11 +142,18 @@
     </main>
 
     <!-- BOTTOM TAB BAR (Mobile) -->
-    <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-50 safe-bottom backdrop-blur-md"
-         style="background: color-mix(in srgb, var(--surface-card) 95%, transparent); border-top: 1px solid var(--surface-border);">
+    <nav
+      class="lg:hidden fixed bottom-0 left-0 right-0 z-50 safe-bottom backdrop-blur-md"
+      style="background: color-mix(in srgb, var(--surface-card) 95%, transparent); border-top: 1px solid var(--surface-border);"
+    >
       <div class="flex justify-around">
-        <router-link v-for="route in navRoutes" :key="route.path"
-                     :to="route.path" class="bottom-tab" active-class="active">
+        <router-link
+          v-for="route in navRoutes"
+          :key="route.path"
+          :to="route.path"
+          class="bottom-tab"
+          active-class="active"
+        >
           <font-awesome-icon :icon="route.icon" class="tab-icon" />
           <span>{{ route.shortName || route.name }}</span>
         </router-link>
@@ -145,14 +177,23 @@ const themeStore   = useThemeStore()
 
 const user = computed(() => authStore.user)
 
-// Status (selalu Live di demo — simulator aktif / tidak)
-const statusLabel = computed(() => parkingStore.simulatorActive ? '● Live' : '● Ready')
+// Status — demo: simulator aktif = Live, tidak aktif = Ready
+const isLive = computed(() => parkingStore.simulatorActive || parkingStore.wsConnected)
+
+const statusLabel = computed(() => {
+  if (parkingStore.simulatorActive) return '● Live'
+  return '● Ready'
+})
+
 const statusDotClass = computed(() => [
   'w-2 h-2 rounded-full',
   parkingStore.simulatorActive ? 'bg-status-ok animate-pulse-slow' : 'bg-yellow-400',
 ])
+
 const statusBadgeClass = computed(() =>
-  parkingStore.simulatorActive ? 'bg-status-ok/15 text-status-ok' : 'bg-yellow-400/15 text-yellow-500'
+  parkingStore.simulatorActive
+    ? 'bg-status-ok/15 text-status-ok'
+    : 'bg-yellow-400/15 text-yellow-500'
 )
 
 const userInitials = computed(() => {
@@ -173,7 +214,7 @@ function toggleSim() {
 }
 
 function doReset() {
-  parkingStore.simulatorActive && parkingStore.toggleSimulator()
+  if (parkingStore.simulatorActive) parkingStore.toggleSimulator()
   resetDemoData()
   parkingStore.refreshStats()
 }

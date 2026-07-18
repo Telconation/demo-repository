@@ -32,9 +32,9 @@ function HtmlFallback() {
 
 /**
  * Vite Demo Config
- * Build target: src-demo/
- * Output dir  : dist-demo/
- * Entry       : index-demo.html
+ * Build target: src/
+ * Output dir  : dist/
+ * Entry       : index.html
  * Port        : 5174 (berbeda dari dev production 5173)
  */
 export default defineConfig({
