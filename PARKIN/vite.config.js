@@ -9,9 +9,9 @@ import path from 'path'
  * Tanpa ini, Vite fallback ke index.html (production)
  * yang me-load src/main.js → error virtual:pwa-register.
  */
-function demoHtmlFallback() {
+function HtmlFallback() {
   return {
-    name: 'demo-html-fallback',
+    name: 'html-fallback',
     enforce: 'pre',
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
@@ -21,7 +21,7 @@ function demoHtmlFallback() {
         if (req.headers.accept && req.headers.accept.includes('text/html')) {
           // Abaikan request ke assets/API/vite internals
           if (!req.url.startsWith('/@') && !req.url.includes('.')) {
-            req.url = '/index-demo.html'
+            req.url = '/index.html'
           }
         }
         next()
@@ -40,26 +40,26 @@ function demoHtmlFallback() {
 export default defineConfig({
   plugins: [
     vue(),
-    demoHtmlFallback(),
+    HtmlFallback(),
   ],
   root: '.',
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src-demo'),
+      '@': path.resolve(__dirname, 'src'),
     },
   },
   build: {
-    outDir: 'dist-demo',
+    outDir: 'dist',
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        app: path.resolve(__dirname, 'index-demo.html'),
+        app: path.resolve(__dirname, 'index.html'),
       },
     },
   },
   server: {
     port: 5174,
-    open: '/index-demo.html',
+    open: '/index.html',
   },
   preview: {
     port: 4174,
